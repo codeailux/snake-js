@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Snake</title>
+</head>
+<body style="text-align:center;margin:100px;background-color:#aaaaaa">
+<canvas id="canv" width="400" height="400" style="background-color:gray">
+</canvas>
+<script>
+//声明变量
+var box=document.getElementById('canv').getContext('2d');
+var snake;
+var direction;//1.向右，-1向左，20向下，-20向上
+var n;//下次移动相关
+var food;
+
+//绘制地图
+function draw(point,color){
+box.fillStyle=color;
+box.fillRect(point%20*20+1,~~(point/20)*20+1,18,18);
+}
+(function(){ready();}());
+function ready(){
+for(var i=0;i<400;i++){
+draw(i,"#313131");
+}
+snake=[66,65,64];
+direction=1;
+food=344;
+draw(food,"yellow");
+draw(66,"#00b7ee");
+draw(65,"#00b7ee");
+draw(64,"#00b7ee");
+}
+
+//核心算法
+function run(){
+document.getElementById("butn").setAttribute("disabled",true);
+snake.unshift(n=snake[0]+direction);
+if(snake.indexOf(n,1)>0||n<0||n>399||(direction==-1&&n%20==19)||(direction==1&&n%20==0))
+{ready();
+document.getElementById("butn").removeAttribute("disabled");
+return alert("游戏结束");}
+draw(n,"#00b7ee");
+if(n==food)
+{while(snake.indexOf(food=~~(Math.random()*400))>0);
+draw(food,"yellow");
+}
+else{draw(snake.pop(),"#313131");}
+setTimeout(arguments.callee,200);
+}
+
+//添加键盘事件
+document.onkeydown=function(e){
+if(direction==1||direction==-1){
+if(e.keyCode==38)
+{direction=-20;}
+if(e.keyCode==40)
+{direction=20;}
+}
+if(direction==20||direction==-20){
+if(e.keyCode==39)
+{direction=1;}
+if(e.keyCode==37)
+{direction=-1;}
+}}
+
+</script>
+<div>
+<button id="butn" type="button" onclick="run()">开始游戏</button>
+</div>
+</body>
+</html>
